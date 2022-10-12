@@ -29,7 +29,7 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void ConstructorNull(string dir)
         {
-            dir.Invoking(d => new DirectoryStore(d))
+            FluentActions.Invoking(() => new DirectoryStore(dir))
                 .Should().Throw<ArgumentNullException>();
         }
 

@@ -19,21 +19,14 @@ namespace Workstation.UaClient.UnitTests.Channels
     {
         private abstract class TypeMappingEquivalency<TSubject, TExpectation> : IEquivalencyStep
         {
-            public bool CanHandle(IEquivalencyValidationContext context,
-                IEquivalencyAssertionOptions config)
-                => context.Subject is TSubject && context.Expectation is TExpectation;
-
-            public bool Handle(IEquivalencyValidationContext context, IEquivalencyValidator
-                parent, IEquivalencyAssertionOptions config)
+            public EquivalencyResult Handle(Comparands comparands, IEquivalencyValidationContext context, IEquivalencyValidator nestedValidator)
             {
-                var subject = (TSubject)context.Subject;
-                var expectation = (TExpectation)context.Expectation;
-
-                Test(subject, expectation, context.Because, context.BecauseArgs);
-
-                return true;
+                if (comparands.Subject is TSubject subject && comparands.Expectation is TExpectation expectation)
+                {
+                    Test(subject, expectation, context.Reason.FormattedMessage, context.Reason.Arguments);
+                }
+                return EquivalencyResult.ContinueWithNext;
             }
-
             protected abstract void Test(TSubject subject, TExpectation expectation, string because, object[] becauseArgs);
         }
 
@@ -45,7 +38,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                     .Should().Be((Guid)expectation);
             }
         }
-        
+
         private class VariantEquivalency : TypeMappingEquivalency<Variant, Opc.Ua.Variant>
         {
             protected override void Test(Variant subject, Opc.Ua.Variant expectation, string because, object[] becauseArgs)
@@ -166,7 +159,7 @@ namespace Workstation.UaClient.UnitTests.Channels
             protected override void Test(XElement subject, XmlElement expectation, string because, object[] becauseArgs)
             {
                 var xml = ToXmlNode(subject);
-                
+
                 xml
                     .Should().BeEquivalentTo(expectation, because, becauseArgs);
             }
@@ -201,7 +194,7 @@ namespace Workstation.UaClient.UnitTests.Channels
 
             // NodeId
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new NodeIdEquivalency()));
-            
+
             // ExpandedNodeId
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new ExpandedNodeIdEquivalency()));
 
@@ -216,7 +209,7 @@ namespace Workstation.UaClient.UnitTests.Channels
 
             // TimeZoneDataType
             AssertionOptions.AssertEquivalencyUsing(options => options.ComparingByMembers<TimeZoneDataType>().ExcludingMissingMembers());
-            
+
             // Matrix/Multidim array
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new MatrixEquivalency()));
         }

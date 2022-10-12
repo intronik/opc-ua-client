@@ -37,9 +37,7 @@ namespace Workstation.UaClient.UnitTests
         [Fact]
         public void CreateNull()
         {
-            Action<string> action = null;
-
-            action.Invoking(a => new ErrorsContainer<int>(a))
+            FluentActions.Invoking(() => new ErrorsContainer<int>(null))
                 .Should().Throw<ArgumentNullException>();
         }
 

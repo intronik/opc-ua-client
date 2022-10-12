@@ -46,7 +46,7 @@ namespace Workstation.UaClient.UnitTests
         public void CreateFromStringNull()
         {
             var id = default(string);
-            id.Invoking(i => new NodeId(i, 2))
+            FluentActions.Invoking(() => new NodeId(id, 2))
                 .Should().Throw<ArgumentNullException>();
         }
 
@@ -84,7 +84,7 @@ namespace Workstation.UaClient.UnitTests
         public void CreateFromOpaqueNull()
         {
             var id = default(byte[]);
-            id.Invoking(i => new NodeId(i, 2))
+            FluentActions.Invoking(() => new NodeId(id, 2))
                 .Should().Throw<ArgumentNullException>();
         }
 
@@ -254,7 +254,7 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void NotParsable(string s)
         {
-            s.Invoking(t => NodeId.Parse(t))
+            FluentActions.Invoking(() => NodeId.Parse(s))
                 .Should().Throw<ServiceResultException>()
                 .Which.HResult
                 .Should().Be(unchecked((int)StatusCodes.BadNodeIdInvalid));
@@ -290,7 +290,7 @@ namespace Workstation.UaClient.UnitTests
                     y.NodeId.Identifier.Should().Be(nodeId.Identifier);
                     break;
                 default:
-                    nodeId.Invoking(n => NodeId.ToExpandedNodeId(n, nsUris))
+                    FluentActions.Invoking(() => NodeId.ToExpandedNodeId(nodeId, nsUris))
                         .Should().Throw<IndexOutOfRangeException>();
                     break;
             }
@@ -302,7 +302,7 @@ namespace Workstation.UaClient.UnitTests
             var nodeId = default(NodeId);
             var nsUris = new string[] { };
 
-            nodeId.Invoking(n => NodeId.ToExpandedNodeId(n, nsUris))
+            FluentActions.Invoking(() => NodeId.ToExpandedNodeId(nodeId, nsUris))
                 .Should().Throw<ArgumentNullException>();
         }
     }
