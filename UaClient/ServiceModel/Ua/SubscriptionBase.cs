@@ -450,7 +450,7 @@ namespace Workstation.ServiceModel.Ua
         /// </summary>
         /// <param name="sender">the sender.</param>
         /// <param name="e">the event.</param>
-        private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (this.isPublishing || string.IsNullOrEmpty(e.PropertyName))
             {

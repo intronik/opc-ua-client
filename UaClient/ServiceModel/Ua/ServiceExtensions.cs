@@ -87,7 +87,7 @@ namespace Workstation.ServiceModel.Ua
                     }
                 }
             });
-            
+
             var result = response.Results?[0];
 
             if (result == null)
@@ -131,7 +131,7 @@ namespace Workstation.ServiceModel.Ua
             {
                 throw new ServiceResultException(StatusCodes.BadDataEncodingInvalid, "The CallMethodeResult is null!");
             }
-            
+
             return result.StatusCode;
         }
 
@@ -172,8 +172,7 @@ namespace Workstation.ServiceModel.Ua
                 {
                     throw new TimeoutException($"Task timed out after {timeout}");
                 }
-
-                throw t.Exception;
+                throw t.Exception ?? new Exception("TimeoutAfter: Task faulted!");
             }
 
             return await task.ConfigureAwait(false);
