@@ -189,7 +189,7 @@ namespace Workstation.ServiceModel.Ua
         }
 
         /// <inheritdoc/>
-        public event PropertyChangedEventHandler PropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged
         {
             add
             {
@@ -351,9 +351,9 @@ namespace Workstation.ServiceModel.Ua
         /// </summary>
         /// <param name="propertyName">The name of the property to retrieve validation errors for, or null or System.String.Empty to retrieve entity-level errors.</param>
         /// <returns>The validation errors for the property or entity.</returns>
-        public IEnumerable GetErrors(string propertyName)
+        public IEnumerable GetErrors(string? propertyName)
         {
-            return this.errors.GetErrors(propertyName);
+            return this.errors.GetErrors(propertyName??String.Empty);
         }
 
         /// <summary>

@@ -359,7 +359,7 @@ namespace Workstation.ServiceModel.Ua.Channels
                     MaxResponseMessageSize = RemoteMaxMessageSize
                 };
 
-                var createSessionResponse = await this.CreateSessionAsync(createSessionRequest).ConfigureAwait(false);
+                var createSessionResponse = await this.CreateSessionAsync(createSessionRequest, token).ConfigureAwait(false);
                 SessionId = createSessionResponse.SessionId;
                 AuthenticationToken = createSessionResponse.AuthenticationToken;
                 RemoteNonce = createSessionResponse.ServerNonce;
@@ -472,7 +472,7 @@ namespace Workstation.ServiceModel.Ua.Channels
             // if UserIdentity type is IssuedIdentity
             if (UserIdentity is IssuedIdentity issuedIdentity)
             {
-                var tokenPolicy = RemoteEndpoint.UserIdentityTokens.FirstOrDefault(t => t?.TokenType == UserTokenType.IssuedToken);
+                var tokenPolicy = RemoteEndpoint.UserIdentityTokens?.FirstOrDefault(t => t?.TokenType == UserTokenType.IssuedToken);
                 if (tokenPolicy == null)
                 {
                     throw new ServiceResultException(StatusCodes.BadIdentityTokenRejected);
@@ -552,7 +552,7 @@ namespace Workstation.ServiceModel.Ua.Channels
             // if UserIdentity type is X509Identity
             else if (UserIdentity is X509Identity x509Identity)
             {
-                var tokenPolicy = RemoteEndpoint.UserIdentityTokens.FirstOrDefault(t => t?.TokenType == UserTokenType.Certificate);
+                var tokenPolicy = RemoteEndpoint.UserIdentityTokens?.FirstOrDefault(t => t?.TokenType == UserTokenType.Certificate);
                 if (tokenPolicy == null)
                 {
                     throw new ServiceResultException(StatusCodes.BadIdentityTokenRejected);
@@ -614,7 +614,7 @@ namespace Workstation.ServiceModel.Ua.Channels
             // if UserIdentity type is UserNameIdentity
             else if (UserIdentity is UserNameIdentity userNameIdentity)
             {
-                var tokenPolicy = RemoteEndpoint.UserIdentityTokens.FirstOrDefault(t => t?.TokenType == UserTokenType.UserName);
+                var tokenPolicy = RemoteEndpoint.UserIdentityTokens?.FirstOrDefault(t => t?.TokenType == UserTokenType.UserName);
                 if (tokenPolicy == null)
                 {
                     throw new ServiceResultException(StatusCodes.BadIdentityTokenRejected);
@@ -699,7 +699,7 @@ namespace Workstation.ServiceModel.Ua.Channels
             // if UserIdentity type is AnonymousIdentity or null
             else
             {
-                var tokenPolicy = RemoteEndpoint.UserIdentityTokens.FirstOrDefault(t => t?.TokenType == UserTokenType.Anonymous);
+                var tokenPolicy = RemoteEndpoint.UserIdentityTokens?.FirstOrDefault(t => t?.TokenType == UserTokenType.Anonymous);
                 if (tokenPolicy == null)
                 {
                     throw new ServiceResultException(StatusCodes.BadIdentityTokenRejected);
@@ -773,7 +773,7 @@ namespace Workstation.ServiceModel.Ua.Channels
             var linkToken = this.LinkTo(_actionBlock, pr => pr.SubscriptionId == id);
 
             // start publishing.
-            _stateMachineTask = Task.Run(() => StateMachineAsync(_stateMachineCts.Token));
+            _stateMachineTask = StateMachineAsync(_stateMachineCts.Token);
         }
 
         /// <inheritdoc/>
