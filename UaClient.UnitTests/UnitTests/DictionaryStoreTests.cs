@@ -29,8 +29,8 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void ConstructorNull(string dir)
         {
-            FluentActions.Invoking(() => new DirectoryStore(dir))
-                .Should().Throw<ArgumentNullException>();
+            Action act = () => new DirectoryStore(dir);
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

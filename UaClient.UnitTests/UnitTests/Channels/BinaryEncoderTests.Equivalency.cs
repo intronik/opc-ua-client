@@ -12,8 +12,6 @@ using System.Xml.Linq;
 using Workstation.ServiceModel.Ua;
 using Workstation.ServiceModel.Ua.Channels;
 using Xunit;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using FluentAssertions.Execution;
 
 namespace Workstation.UaClient.UnitTests.Channels
 {
@@ -21,11 +19,16 @@ namespace Workstation.UaClient.UnitTests.Channels
     {
         private abstract class TypeMappingEquivalency<TSubject, TExpectation> : IEquivalencyStep
         {
-            public EquivalencyResult Handle(Comparands comparands, IEquivalencyValidationContext context, IEquivalencyValidator nestedValidator)
+
+           public EquivalencyResult Handle(Comparands comparands, IEquivalencyValidationContext context, IEquivalencyValidator nestedValidator)
             {
-                if (comparands.Subject is TSubject subject && comparands.Expectation is TExpectation expectation)
+                if (comparands.Subject is TSubject subject)
                 {
-                    Test(subject, expectation, context.Reason.FormattedMessage, context.Reason.Arguments);
+                    if (comparands.Expectation is TExpectation expectation)
+                    {
+                        Test(subject, expectation, context.Reason.FormattedMessage, context.Reason.Arguments);
+                        return EquivalencyResult.AssertionCompleted;
+                    }
                 }
                 return EquivalencyResult.ContinueWithNext;
             }
@@ -33,9 +36,9 @@ namespace Workstation.UaClient.UnitTests.Channels
             protected abstract void Test(TSubject subject, TExpectation expectation, string because, object[] becauseArgs);
         }
 
-        private class VariantEquivalency : TypeMappingEquivalency<Opc.Ua.Variant, Variant>
+        private class VariantEquivalency : TypeMappingEquivalency<Opc.Ua.Variant,Variant>
         {
-            protected override void Test(Opc.Ua.Variant subject, Variant expectation, string because, object[] becauseArgs)
+            protected override void Test(Opc.Ua.Variant subject,Variant expectation, string because, object[] becauseArgs)
             {
                 subject.Value
                     .Should().BeEquivalentTo(expectation.Value, because, becauseArgs);
@@ -45,7 +48,7 @@ namespace Workstation.UaClient.UnitTests.Channels
             }
         }
 
-        private class StatusCodeEquivalency : TypeMappingEquivalency<Opc.Ua.StatusCode, StatusCode>
+        private class StatusCodeEquivalency : TypeMappingEquivalency<Opc.Ua.StatusCode,StatusCode>
         {
             protected override void Test(Opc.Ua.StatusCode subject, StatusCode expectation, string because, object[] becauseArgs)
             {
@@ -137,7 +140,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                     .Should().Be(expectation.ServerPicoseconds);
             }
         }
-
+        
         private class MatrixEquivalency : TypeMappingEquivalency<Opc.Ua.Matrix, Array>
         {
             protected override void Test(Opc.Ua.Matrix subject, Array expectation, string because, object[] becauseArgs)
@@ -153,7 +156,7 @@ namespace Workstation.UaClient.UnitTests.Channels
             protected override void Test(XmlNode subject, XElement expectation, string because, object[] becauseArgs)
             {
                 var xelem = XElement.Load(subject.CreateNavigator().ReadSubtree());
-
+                
                 xelem
                     .Should().BeEquivalentTo(expectation, because, becauseArgs);
             }
@@ -176,7 +179,7 @@ namespace Workstation.UaClient.UnitTests.Channels
 
             // NodeId
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new NodeIdEquivalency()));
-
+            
             // ExpandedNodeId
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new ExpandedNodeIdEquivalency()));
 
@@ -188,7 +191,7 @@ namespace Workstation.UaClient.UnitTests.Channels
 
             // Xml
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new XmlEquivalency()));
-
+            
             // Matrix/Multidim array
             AssertionOptions.AssertEquivalencyUsing(options => options.Using(new MatrixEquivalency()));
         }

@@ -47,7 +47,10 @@ namespace Workstation.UaClient.UnitTests.Channels
         [Fact]
         public void CreateWithNullStream()
         {
-            FluentActions.Invoking(() => new BinaryDecoder(null)).Should().Throw<ArgumentNullException>();
+            Stream stream = null;
+
+            Action act = () => new BinaryDecoder(stream);
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [InlineData(true)]

@@ -46,8 +46,8 @@ namespace Workstation.UaClient.UnitTests
         public void CreateFromStringNull()
         {
             var id = default(string);
-            FluentActions.Invoking(() => new NodeId(id, 2))
-                .Should().Throw<ArgumentNullException>();
+            Action act = () => new NodeId(id, 2);
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -84,8 +84,9 @@ namespace Workstation.UaClient.UnitTests
         public void CreateFromOpaqueNull()
         {
             var id = default(byte[]);
-            FluentActions.Invoking(() => new NodeId(id, 2))
-                .Should().Throw<ArgumentNullException>();
+            Action act = () => new NodeId(id, 2);
+
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -254,8 +255,8 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void NotParsable(string s)
         {
-            FluentActions.Invoking(() => NodeId.Parse(s))
-                .Should().Throw<ServiceResultException>()
+            Action act = () => NodeId.Parse(s);
+            act.Should().Throw<ServiceResultException>()
                 .Which.HResult
                 .Should().Be(unchecked((int)StatusCodes.BadNodeIdInvalid));
         }
@@ -290,7 +291,7 @@ namespace Workstation.UaClient.UnitTests
                     y.NodeId.Identifier.Should().Be(nodeId.Identifier);
                     break;
                 default:
-                    FluentActions.Invoking(() => NodeId.ToExpandedNodeId(nodeId, nsUris))
+                    nodeId.Invoking(n => NodeId.ToExpandedNodeId(n, nsUris))
                         .Should().Throw<IndexOutOfRangeException>();
                     break;
             }
@@ -302,8 +303,8 @@ namespace Workstation.UaClient.UnitTests
             var nodeId = default(NodeId);
             var nsUris = new string[] { };
 
-            FluentActions.Invoking(() => NodeId.ToExpandedNodeId(nodeId, nsUris))
-                .Should().Throw<ArgumentNullException>();
+            Action act = () => NodeId.ToExpandedNodeId(nodeId, nsUris);
+            act.Should().Throw<ArgumentNullException>();
         }
     }
 }

@@ -154,8 +154,8 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void NotParsable(string text)
         {
-            FluentActions.Invoking(() => QualifiedName.Parse(text))
-                .Should().Throw<ArgumentException>();
+            Action act = () => QualifiedName.Parse(text);
+            act.Should().Throw<ArgumentException>();
         }
     }
 }

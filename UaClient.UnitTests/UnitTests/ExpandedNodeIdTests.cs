@@ -308,8 +308,8 @@ namespace Workstation.UaClient.UnitTests
         [Theory]
         public void NotParsable(string s)
         {
-            FluentActions.Invoking(() => ExpandedNodeId.Parse(s))
-                .Should().Throw<ServiceResultException>()
+            Action act = () => ExpandedNodeId.Parse(s);
+            act.Should().Throw<ServiceResultException>()
                 .Which.HResult
                 .Should().Be(unchecked((int)StatusCodes.BadNodeIdInvalid));
         }
@@ -354,7 +354,7 @@ namespace Workstation.UaClient.UnitTests
                     y.Identifier.Should().Be(exnodeId.NodeId.Identifier);
                     break;
                 default:
-                    FluentActions.Invoking(() => ExpandedNodeId.ToNodeId(exnodeId, NamespaceUris))
+                    exnodeId.Invoking(n => ExpandedNodeId.ToNodeId(n, NamespaceUris))
                         .Should().Throw<IndexOutOfRangeException>();
                     break;
             }
@@ -366,8 +366,8 @@ namespace Workstation.UaClient.UnitTests
             var nodeId = default(ExpandedNodeId);
             var nsUris = new string[] { };
 
-            FluentActions.Invoking(() => ExpandedNodeId.ToNodeId(nodeId, nsUris))
-                .Should().Throw<ArgumentNullException>();
+            Action act = () => ExpandedNodeId.ToNodeId(nodeId, nsUris);
+            act.Should().Throw<ArgumentNullException>();
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Workstation.ServiceModel.Ua;
 using Workstation.ServiceModel.Ua.Channels;
 using Xunit;
+using Newtonsoft.Json.Linq;
 
 namespace Workstation.UaClient.UnitTests.Channels
 {
@@ -19,14 +20,21 @@ namespace Workstation.UaClient.UnitTests.Channels
     {
         private abstract class TypeMappingEquivalency<TSubject, TExpectation> : IEquivalencyStep
         {
+
             public EquivalencyResult Handle(Comparands comparands, IEquivalencyValidationContext context, IEquivalencyValidator nestedValidator)
             {
-                if (comparands.Subject is TSubject subject && comparands.Expectation is TExpectation expectation)
+                if (comparands.Subject is TSubject subject)
                 {
-                    Test(subject, expectation, context.Reason.FormattedMessage, context.Reason.Arguments);
+                    if (comparands.Expectation is TExpectation expectation)
+                    {
+                        Test(subject, expectation, context.Reason.FormattedMessage, context.Reason.Arguments);
+                        return EquivalencyResult.AssertionCompleted;
+                    }
                 }
                 return EquivalencyResult.ContinueWithNext;
+
             }
+
             protected abstract void Test(TSubject subject, TExpectation expectation, string because, object[] becauseArgs);
         }
 

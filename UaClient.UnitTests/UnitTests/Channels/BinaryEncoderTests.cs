@@ -31,8 +31,10 @@ namespace Workstation.UaClient.UnitTests.Channels
         [Fact]
         public void CreateWithNullStream()
         {
-            FluentActions.Invoking(() => new BinaryEncoder(null))
-                .Should().Throw<ArgumentNullException>();
+            Stream stream = null;
+
+            Action act = () => new BinaryEncoder(stream);
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [InlineData(true)]
@@ -204,7 +206,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().Be(val);
         }
 
-        public static IEnumerable<object[]> EncodeDateTimeData { get; } = new[]
+        public static IEnumerable<object[]> EncodeDateTimeData { get; } = new []
         {
             new DateTime(0),
             new DateTime(1601, 1, 1, 0, 0, 1),
@@ -223,7 +225,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadDateTime(null))
                 .Should().Be(val);
         }
-
+        
         [Fact]
         public void EncodeDateTimeLocal()
         {
@@ -233,7 +235,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadDateTime(null))
                 .Should().Be(val.ToUniversalTime());
         }
-
+        
         [Fact]
         public void EncodeDateTimeUnspecified()
         {
@@ -244,7 +246,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().Be(val);
         }
 
-        public static IEnumerable<object[]> EncodeGuidData { get; } = new[]
+        public static IEnumerable<object[]> EncodeGuidData { get; } = new []
         {
             Guid.Empty,
             Guid.NewGuid()
@@ -261,7 +263,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().Be(val);
         }
 
-        public static IEnumerable<object[]> EncodeByteStringData { get; } = new[]
+        public static IEnumerable<object[]> EncodeByteStringData { get; } = new []
         {
             null,
             new byte[] { },
@@ -280,7 +282,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().BeEquivalentTo(val);
         }
 
-        public static IEnumerable<object[]> EncodeXElementData { get; } = new[]
+        public static IEnumerable<object[]> EncodeXElementData { get; } = new []
         {
              @"
                 <Window x:Class=""WpfApplication1.Window1""
@@ -306,7 +308,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().BeEquivalentTo(val);
         }
 
-        public static IEnumerable<object[]> EncodeNodeIdData { get; } = new[]
+        public static IEnumerable<object[]> EncodeNodeIdData { get; } = new []
         {
             "ns=0;i=12",
             "ns=0;i=300",
@@ -339,7 +341,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().Be(Opc.Ua.NodeId.Null);
         }
 
-        public static IEnumerable<object[]> EncodeExpandedNodeIdData { get; } = new[]
+        public static IEnumerable<object[]> EncodeExpandedNodeIdData { get; } = new []
         {
             "ns=0;i=12",
             "svr=1;ns=0;i=300",
@@ -362,7 +364,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadExpandedNodeId(null))
                 .Should().BeEquivalentTo(val);
         }
-
+        
         [Fact]
         public void EncodeExpandedNodeIdNull()
         {
@@ -389,7 +391,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().BeEquivalentTo(val);
         }
 
-        public static IEnumerable<object[]> EncodeDiagnosticInfoData { get; } = new[]
+        public static IEnumerable<object[]> EncodeDiagnosticInfoData { get; } = new []
         {
             new DiagnosticInfo(),
             new DiagnosticInfo(2),
@@ -412,7 +414,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadDiagnosticInfo(null))
                 .Should().BeEquivalentTo(val);
         }
-
+        
         [Fact]
         public void EncodeDiagnosticInfoNull()
         {
@@ -422,7 +424,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().BeEquivalentTo(new Opc.Ua.DiagnosticInfo());
         }
 
-        public static IEnumerable<object[]> EncodeQualifiedNameData { get; } = new[]
+        public static IEnumerable<object[]> EncodeQualifiedNameData { get; } = new []
         {
             new QualifiedName(null),
             QualifiedName.Parse("4:Test")
@@ -438,7 +440,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadQualifiedName(null))
                 .Should().BeEquivalentTo(val);
         }
-
+        
         [Fact]
         public void EncodeQualifiedNameNull()
         {
@@ -448,7 +450,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 .Should().BeEquivalentTo(Opc.Ua.QualifiedName.Null);
         }
 
-        public static IEnumerable<object[]> EncodeLocalizedTextData { get; } = new[]
+        public static IEnumerable<object[]> EncodeLocalizedTextData { get; } = new []
         {
             new LocalizedText("Text", ""),
             new LocalizedText("Text", "de"),
@@ -471,7 +473,7 @@ namespace Workstation.UaClient.UnitTests.Channels
                 d => d.ReadLocalizedText(null))
                 .Should().BeEquivalentTo(val);
         }
-
+        
         [Fact]
         public void EncodeLocalizedTextNull()
         {
@@ -574,11 +576,10 @@ namespace Workstation.UaClient.UnitTests.Channels
         [Theory]
         public void EncodeDataValue(DataValue val)
         {
-            var result = EncodeDecode(
+            EncodeDecode(
                 e => e.WriteDataValue(null, val),
-                d => d.ReadDataValue(null));
-            var expectation = new Opc.Ua.DataValue(new Opc.Ua.Variant(val.Value), val.StatusCode.Value, val.SourceTimestamp, val.ServerTimestamp);
-            result.Should().BeEquivalentTo(expectation);
+                d => d.ReadDataValue(null))
+                .Should().BeEquivalentTo(val);
         }
 
         [Fact]
@@ -624,7 +625,7 @@ namespace Workstation.UaClient.UnitTests.Channels
         [InlineData(null)]
         [InlineData(new bool[] { })]
         [InlineData(new bool[] { true })]
-        [InlineData(new bool[] { true, false })]
+        [InlineData(new bool[] { true, false})]
         [Theory]
         public void EncodeBooleanArray(bool[] val)
         {
