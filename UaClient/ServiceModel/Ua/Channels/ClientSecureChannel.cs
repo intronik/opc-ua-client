@@ -426,7 +426,9 @@ namespace Workstation.ServiceModel.Ua.Channels
                         continue;
                     }
 
-                    // TODO: remove when open62541 server corrected.
+                    // the default approach by locating the request by with the RequestHandle failed
+                    // this happends, if the server is not implemented correctly
+                    // we try to find it by name, which might fail
                     if (header.RequestHandle == 0)
                     {
                         // if the returned request handle, find a handle of a matching type, by replacing
