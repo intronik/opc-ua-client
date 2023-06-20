@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net7.0</TargetFrameworks>
 		<AssemblyName>Workstation.UaClient</AssemblyName>
 		<RootNamespace>Workstation</RootNamespace>
 		<Version>3.2.0</Version>
@@ -15,7 +15,7 @@
 		<Copyright>Copyright ©  2023 Converter Systems LLC.</Copyright>
 		<AssemblyVersion>3.2.0.0</AssemblyVersion>
 		<AssemblyTitle>Workstation.UaClient ($(TargetFramework))</AssemblyTitle>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<FileVersion>3.2.0.0</FileVersion>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
@@ -39,7 +39,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.1" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="System.ValueTuple" Version="4.5.0" />

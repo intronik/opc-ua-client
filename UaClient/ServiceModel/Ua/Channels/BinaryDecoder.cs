@@ -946,7 +946,7 @@ namespace Workstation.ServiceModel.Ua.Channels
         /// <summary>
         /// Reads a boolean value array from the stream.
         /// </summary>
-        /// <param name="fieldName">The field name.</param>
+        /// <param name="fieldNames">The field name.</param>
         /// <returns>The value.</returns>
         /// <seealso href="https://reference.opcfoundation.org/v104/Core/docs/Part6/5.2.2/#5.2.2.1">OPC UA specification Part 6: Mappings, 5.2.2.1</seealso>
         /// <seealso href="https://reference.opcfoundation.org/v104/Core/docs/Part6/5.2.5/">OPC UA specification Part 6: Mappings, 5.2.5</seealso>

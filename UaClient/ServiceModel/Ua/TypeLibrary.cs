@@ -18,9 +18,8 @@ namespace Workstation.ServiceModel.Ua
     public sealed class TypeLibraryAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="ApplicationPartAttribute" />.
+        /// Initializes a new instance of <see cref="TypeLibraryAttribute" />.
         /// </summary>
-        /// <param name="assemblyName">The assembly name.</param>
         public TypeLibraryAttribute()
         {
         }
