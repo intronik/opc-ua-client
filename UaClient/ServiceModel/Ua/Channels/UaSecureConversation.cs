@@ -477,7 +477,7 @@ namespace Workstation.ServiceModel.Ua.Channels
                         chunkSize = plainHeaderSize + _sequenceHeaderSize + bodySize + _symSignatureSize;
                     }
 
-                    bodyStream.Read(_sendBuffer, encoder.Position, bodySize);
+                    bodyStream.ReadExactly(_sendBuffer, encoder.Position, bodySize);
                     encoder.Position += bodySize;
                     bodyCount -= bodySize;
 
@@ -612,7 +612,7 @@ namespace Workstation.ServiceModel.Ua.Channels
                         chunkSize = plainHeaderSize + _sequenceHeaderSize + bodySize + _asymLocalSignatureSize;
                     }
 
-                    bodyStream.Read(_sendBuffer!, encoder.Position, bodySize);
+                    bodyStream.ReadExactly(_sendBuffer!, encoder.Position, bodySize);
                     encoder.Position += bodySize;
                     bodyCount -= bodySize;
 
