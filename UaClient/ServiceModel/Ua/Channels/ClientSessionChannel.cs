@@ -342,9 +342,8 @@ namespace Workstation.ServiceModel.Ua.Channels
                     LocalCertificate = tuple.Certificate?.GetEncoded();
                     LocalPrivateKey = tuple.Key;
                 }
-
-                var certBytes = RemoteCertificate;
-                var cert = (certBytes?.Length ?? 0) > 0 ? _certificateParser.ReadCertificate(RemoteCertificate) : null;
+            
+                var cert = _certificateParser.ReadCertificate(RemoteCertificate);
                 RemotePublicKey = cert?.GetPublicKey() as RsaKeyParameters;
 
                 var createSessionRequest = new CreateSessionRequest

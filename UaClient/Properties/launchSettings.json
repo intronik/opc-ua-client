@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Workstation.UaClient": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:62851"
+    }
+  }
+}
